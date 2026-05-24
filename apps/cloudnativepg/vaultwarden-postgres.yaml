@@ -1,0 +1,19 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: vaultwarden-db
+  namespace: default
+spec:
+  instances: 2
+  storage:
+    size: 2Gi
+    storageClass: longhorn
+  postgresql:
+    parameters:
+      max_connections: "100"
+  bootstrap:
+    initdb:
+      database: vaultwarden
+      owner: vaultwarden
+      secret:
+        name: vaultwarden-db-credentials
