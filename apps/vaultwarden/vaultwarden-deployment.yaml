@@ -23,10 +23,8 @@ spec:
           value: https://vaultwarden.homelab.local
         - name: SIGNUPS_ALLOWED
           value: "false"
-        volumeMounts:
-        - name: vaultwarden-data
-          mountPath: /data
-      volumes:
-      - name: vaultwarden-data
-        persistentVolumeClaim:
-          claimName: vaultwarden-pvc
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: vaultwarden-db-credentials
+              key: database-url
