@@ -6,6 +6,9 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
+  tls:
+  - hosts:
+    - spencer-kennedy.com
   rules:
   - host: spencer-kennedy.com
     http:
