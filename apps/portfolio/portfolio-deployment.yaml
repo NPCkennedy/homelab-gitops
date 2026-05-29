@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: portfolio
-        image: npckennedy/portfolio:7551444e851f99e13e240136d48707af8dec39c1
+        image: npckennedy/portfolio:9105a4349e0c9f097f7d7fcff37f2e297c09e7ba
         ports:
         - containerPort: 5000
