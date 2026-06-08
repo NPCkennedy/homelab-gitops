@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - longhorn.homelab.local
-    secretName: homelab-tls
+    secretName: homelab-local-tls
   rules:
   - host: longhorn.homelab.local
     http:

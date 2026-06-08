@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - vaultwarden.homelab.local
-    secretName: homelab-tls
+    secretName: homelab-local-tls
   rules:
   - host: vaultwarden.homelab.local
     http:

@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - alertmanager.homelab.local
-    secretName: homelab-tls
+    secretName: homelab-local-tls
   rules:
   - host: alertmanager.homelab.local
     http:

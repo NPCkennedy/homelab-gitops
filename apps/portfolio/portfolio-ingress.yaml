@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - portfolio.homelab.local
-    secretName: homelab-tls
+    secretName: homelab-local-tls
   rules:
   - host: portfolio.homelab.local
     http:
