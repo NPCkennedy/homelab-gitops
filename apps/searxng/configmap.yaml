@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: searxng-settings
+  namespace: searxng
+  labels:
+    app: searxng
+    app.kubernetes.io/part-of: searxng
+data:
+  settings.yml: |
+    use_default_settings: true
+
+    server:
+      # Must match the external URL — used in opensearch.xml and result links
+      base_url: "https://searxng.homelab.local/"
+      # Disable rate limiter — Hermes makes automated requests and will get
+      # blocked immediately with limiter on
+      limiter: false
+      image_proxy: false
+      # Generate a real secret: python3 -c "import secrets; print(secrets.token_hex(32))"
+      secret_key: "changeme-replace-with-random-hex-secret"
+
+    search:
+      # JSON format MUST be listed here — without it Hermes gets 403 on every request
+      formats:
+        - html
+        - json
+
+    engines:
+      - name: google
+        engine: google
+        use_mobile_ui: false
+      - name: bing
+        engine: bing
+      - name: duckduckgo
+        engine: duckduckgo
+      - name: github
+        engine: github
