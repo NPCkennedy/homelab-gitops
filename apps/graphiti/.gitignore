@@ -1,0 +1,4 @@
+# NEVER commit these — they contain real credentials.
+# Apply manually with: kubectl apply -f <file>
+03-neo4j-secret.yaml
+07-graphiti-secret.yaml

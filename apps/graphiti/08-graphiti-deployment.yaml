@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphiti-mcp
+  namespace: spencer-os
+  labels:
+    app: graphiti-mcp
+    app.kubernetes.io/part-of: spencer-os
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: graphiti-mcp
+  template:
+    metadata:
+      labels:
+        app: graphiti-mcp
+        app.kubernetes.io/part-of: spencer-os
+    spec:
+      containers:
+        - name: graphiti-mcp
+          # Pin a known version — Graphiti is pre-1.0, breaking changes likely
+          image: zepai/graphiti-mcp:latest
+          ports:
+            - containerPort: 8000
+              name: mcp
+          env:
+            # Neo4j connection — cross-namespace DNS
+            - name: NEO4J_URI
+              value: "bolt://neo4j.neo4j.svc.cluster.local:7687"
+            - name: NEO4J_USER
+              value: "neo4j"
+            - name: NEO4J_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: graphiti-config
+                  key: NEO4J_PASSWORD
+            # LLM for entity extraction — point at OpenRouter
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: graphiti-config
+                  key: OPENAI_API_KEY
+            - name: OPENAI_BASE_URL
+              value: "https://openrouter.ai/api/v1"
+            # Use Haiku for entity extraction — much cheaper than Sonnet,
+            # extraction is a bounded task that doesn't need deep reasoning
+            - name: MODEL_NAME
+              value: "anthropic/claude-haiku-4-5"
+            - name: EMBEDDER_MODEL_NAME
+              value: "openai/text-embedding-3-small"
+            # Use the same group_id across all writes — single-user system
+            - name: GROUP_ID
+              value: "spencer"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 30
