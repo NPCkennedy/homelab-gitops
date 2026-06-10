@@ -1,0 +1,31 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: hermes-write
+  namespace: spencer-os
+  labels:
+    app.kubernetes.io/part-of: spencer-os
+rules:
+  # Full lifecycle on workloads — deploy, update, restart
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets", "statefulsets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Pod exec — for running hermes config set inside the pod
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+  # Pod logs — for diagnosis
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get", "list"]
+  # Rollout restarts
+  - apiGroups: ["apps"]
+    resources: ["deployments/rollout"]
+    verbs: ["update", "patch"]
+  # NOTE: secrets are deliberately excluded — Hermes cannot read or write secrets

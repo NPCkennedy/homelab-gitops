@@ -1,0 +1,21 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: hermes-write
+  namespace: searxng
+  labels:
+    app.kubernetes.io/part-of: spencer-os
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets", "statefulsets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods/exec", "pods/log"]
+    verbs: ["create", "get", "list"]
+  # Secrets deliberately excluded

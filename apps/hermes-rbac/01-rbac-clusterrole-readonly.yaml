@@ -1,0 +1,24 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: hermes-readonly
+  labels:
+    app.kubernetes.io/part-of: spencer-os
+rules:
+  # Read-only across all namespaces — for diagnosis and observability
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps", "events", "namespaces", "nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets", "statefulsets", "daemonsets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["networking.k8s.io", "traefik.io"]
+    resources: ["ingresses", "ingressroutes"]
+    verbs: ["get", "list", "watch"]
+  # Logs — critical for Hermes to diagnose its own pods
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get", "list"]

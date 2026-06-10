@@ -1,0 +1,66 @@
+# Cluster-wide read-only binding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: hermes-readonly
+  labels:
+    app.kubernetes.io/part-of: spencer-os
+subjects:
+  - kind: User
+    name: hermes
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: hermes-readonly
+  apiGroup: rbac.authorization.k8s.io
+---
+# Scoped write on spencer-os
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hermes-write
+  namespace: spencer-os
+  labels:
+    app.kubernetes.io/part-of: spencer-os
+subjects:
+  - kind: User
+    name: hermes
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: hermes-write
+  apiGroup: rbac.authorization.k8s.io
+---
+# Scoped write on searxng
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hermes-write
+  namespace: searxng
+  labels:
+    app.kubernetes.io/part-of: spencer-os
+subjects:
+  - kind: User
+    name: hermes
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: hermes-write
+  apiGroup: rbac.authorization.k8s.io
+---
+# Scoped write on neo4j
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hermes-write
+  namespace: neo4j
+  labels:
+    app.kubernetes.io/part-of: spencer-os
+subjects:
+  - kind: User
+    name: hermes
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: hermes-write
+  apiGroup: rbac.authorization.k8s.io
