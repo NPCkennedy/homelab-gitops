@@ -19,6 +19,9 @@ spec:
         app: graphiti-mcp
         app.kubernetes.io/part-of: spencer-os
     spec:
+      # Same as Neo4j — prevents K8s service-link env vars from polluting
+      # the container's environment
+      enableServiceLinks: false
       containers:
         - name: graphiti-mcp
           # Pin a known version — Graphiti is pre-1.0, breaking changes likely

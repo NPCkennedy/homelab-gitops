@@ -19,6 +19,9 @@ spec:
         app: neo4j
         app.kubernetes.io/part-of: spencer-os
     spec:
+      # Prevents K8s injecting NEO4J_PORT_*_TCP_PORT env vars which Neo4j's
+      # strict config validator rejects as unknown settings
+      enableServiceLinks: false
       containers:
         - name: neo4j
           # Pin a known-good version — Graphiti requires 5.x
